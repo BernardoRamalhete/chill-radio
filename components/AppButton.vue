@@ -434,5 +434,24 @@
             transition: all 0.3s ease;
         }
     }
+
+    &.icon {
+        .background {
+            font-size: 24px;
+            padding: 2px 6px;
+        }
+        .glass {
+            font-size: 24px;
+        }
+    }
+    
+    &.danger {
+        .background {
+            background-color: $primary_red;
+        }
+        .glass {
+            color: $pure_white;
+        }
+    }
 }
 </style>
