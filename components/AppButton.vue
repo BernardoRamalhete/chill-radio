@@ -42,27 +42,17 @@
         <span class="hover bottom eight"/>
         
         <span class="background">
-            {{ text }}
+            <slot/>
         </span>
         
         <span class="glass">
-            {{ text }}
+            <slot/>
         </span>
 
     </button>
 </template>
 
 <script setup>
-import { toRefs } from '#imports'
-
-const props = defineProps({
-    text: {
-        type: String,
-        default: 'Missing Text'
-    }
-})
-
-const {  } = toRefs(props)
 </script>
 
 <style lang="scss" scoped>
