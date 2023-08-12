@@ -9,17 +9,28 @@
                 <p class="subheading">
                     Elevate your Listening experience: join us on the radio for an eclectic mix of groovy beats, perfectly suited to enhance relaxation, boost productivity, and infuse your study sessions with a fun and lively rhythm!
                 </p>
-                <AppButton class="primary" text="Start listening"/>
+                <AppButton class="primary" text="" @click="openPlayer">
+                    Start listening
+                </AppButton>
             </section>
+            <PlayerPage :active="playerActive" @close:player="closePlayer"/>
         </main>
     </div>
 </template>
 
 <script setup>
+const playerActive = ref(false)
 
+function openPlayer() {
+    playerActive.value = true
+}
+
+function closePlayer() {
+    playerActive.value = false
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .wrapper {
     height: 100%;
     background-color: $background_color;

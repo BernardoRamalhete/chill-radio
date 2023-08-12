@@ -25,6 +25,40 @@ input, button, textarea, select {
     font: inherit;
 }
 
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+input[type=search]::-ms-clear { display: none; width : 0; height: 0; }
+input[type=search]::-ms-reveal { display: none; width : 0; height: 0; }
+
+input {
+    &[type=text], &[type=search] {
+        background-color: darken($background-color, 0.5);
+        border: 1px solid whitesmoke;
+        border-radius: 8px;
+        padding: 8px 12px 8px 40px;
+        color: $text_color;
+        width: 100%;
+        &::placeholder {
+            color: rgba($text_color, 0.6);
+        }
+    }
+}
+
+.search-wrapper {
+    position: relative;
+    svg {
+        position: absolute;
+        z-index: 1;
+        color: $text_color;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 8px;
+        font-size: 24px;
+    }
+}
+
 .visually-hidden {
     clip: rect(0 0 0 0); 
     clip-path: inset(50%);
