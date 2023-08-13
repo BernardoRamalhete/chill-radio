@@ -1,0 +1,23 @@
+
+@use "@/assets/scss/variables.scss" as *;
+
+@mixin range-thumb {
+    -webkit-appearance: none !important;
+    height: 12px;
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: $pure_white;
+    cursor: pointer;
+    margin-top: -6px;
+    border-radius: 50%;
+    box-shadow: 0 0 4px 2px rgba($text_color, 0.8);
+}
+
+@mixin range-track {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: $text_color;
+    border-radius: 1.3px;
+}
