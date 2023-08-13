@@ -23,32 +23,54 @@
                 <h2 class=section-title>
                     Find the perfect match to your taste
                 </h2>
-                <ul class="genres-listing">
-                    <li
-                        v-for="genre in genres" :key="genre.id"
-                        class="genres-listing-item"
-                    >
-                        <button 
-                            class="genres-listing-item-button" 
-                            :class="genre.name.toLowerCase()"
+                <div ref="genresContainerElement" class="genres-container">
+                    <ul class="genres-listing">
+                        <li
+                            v-for="genre in genres" :key="genre.id"
+                            class="genres-listing-item"
+                            ref="genresElements"
                         >
-                            <span class="genres-listing-item-button-top">
-                                <Icon name="ph:music-note"/>
-                            </span>
-                            <span class="genres-listing-item-button-bottom">
-                                {{ genre.name }}
-                                {{ genre.numberOfSongs }} songs
-                            </span>
-                        </button>
-                    </li>
-                </ul>
+                            <button 
+                                class="genres-listing-item-button" 
+                                :class="genre.name.toLowerCase()"
+                            >
+                                <span class="genres-listing-item-button-top">
+                                    <Icon name="ph:music-note"/>
+                                </span>
+                                <span class="genres-listing-item-button-bottom">
+                                    <strong>
+                                        {{ genre.name }}
+                                    </strong>
+                                    <small>
+                                        {{ genre.numberOfSongs }} songs
+                                    </small>
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                    <button 
+                        :disabled="!canScrollGenresLeft" 
+                        class="arrow left"
+                        @click="handleGenresScroll('left')"
+                    >
+                        <span class="visually-hidden">Scroll left</span>
+                        <Icon name="ph:caret-left"/>
+                    </button>
+                    <button 
+                        :disabled="!canScrollGenresRight" 
+                        class="arrow right"
+                        @click="handleGenresScroll('right')"
+                    >
+                        <span class="visually-hidden">Scroll right</span>
+                        <Icon name="ph:caret-right"/>
+                    </button>
+                </div>
             </section>
         </div>
     </section>
 </template>
 
 <script setup>
-import { toRefs } from '#imports'
 
 const props = defineProps({
     active: {
@@ -60,6 +82,32 @@ const props = defineProps({
 const { active } = toRefs(props)
 
 const emits = defineEmits(['close:player'])
+
+const genresElements = ref(null)
+const genresContainerElement = ref(null)
+
+onMounted(() => {
+    const options = {
+        root: genresContainerElement.value,
+        rootMargin: '0px',
+        threshold: 1.0
+    }
+
+    const observer = new IntersectionObserver(test, options)
+    observer.observe(genresElements.value[0])
+    observer.observe(genresElements.value.at(-1))
+})
+
+function test(event) {
+    event.forEach(entry => {
+        if(entry.target == genresElements.value[0]) {
+            canScrollGenresLeft.value = !entry.isIntersecting
+        }
+        if(entry.target == genresElements.value.at(-1)) {
+            canScrollGenresRight.value = !entry.isIntersecting
+        }
+    })
+}
 
 const genres = reactive([
     {
@@ -98,6 +146,25 @@ const genres = reactive([
         numberOfSongs: 130
     }
 ])
+
+const genresCarouselPosition = ref('0')
+
+function handleGenresScroll(direction) {
+    
+    if(direction == 'left') {
+        if(!canScrollGenresLeft.value) return
+        genresCarouselPosition.value = (Number(genresCarouselPosition.value.replace('%', '')) + 50) + '%'
+        return
+    }
+
+    if(!canScrollGenresRight.value) return
+
+    genresCarouselPosition.value = (Number(genresCarouselPosition.value.replace('%', '')) - 50) + '%'
+}
+
+const canScrollGenresLeft = ref(false)
+
+const canScrollGenresRight = ref(true)
 </script>
 
 <style lang="scss" scoped>
@@ -141,13 +208,68 @@ const genres = reactive([
             .section-title {
                 font-size: 28px;
                 font-weight: 500;
+                margin-bottom: 12px;
             }
             .genres {
-                margin: 0 32px;
+                margin: 32px;
+                $item_height: 200px;
+                &-container {
+                    position: relative;
+                    height: $item_height;
+                    max-width: 100%;
+                    overflow: hidden;
+                    .arrow {
+                        position: absolute;
+                        top: -5px;
+                        height: calc(100% + 10px);
+                        width: 140px;
+                        z-index: 1;
+                        border-radius: 12px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        padding: 0;
+                        border: none;
+                        font-size: 40px;
+                        background-color: transparent;
+                        color: $text-color;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                        
+                        &:hover {
+                                opacity: 1;
+                        }
+                        &.left {
+                            left: -5px;
+                            padding-left: 20px;
+                            background-image: linear-gradient(90deg, $background-color 2%, transparent);
+                            &:disabled {
+                                left: -1000000000px;
+                            }
+                        }
+                        &.right {
+                            right: -5px;
+                            padding-right: 20px;
+                            align-items: flex-end;
+                            background-image: linear-gradient(-90deg, $background-color 2%, transparent);
+                            &:disabled {
+                                right: -1000000000px;
+                            }
+                        }
+                    }
+                }
                 &-listing {
                     display: flex;
                     align-items: center;
                     gap: 16px;
+                    position: absolute;
+                    left: v-bind(genresCarouselPosition);
+                    transition: left 0.5s ease;
+                    &:hover {
+                        & ~ .arrow:not(:disabled) {
+                            opacity: 1;
+                        }
+                    }
                     &-item {
                         &-button {
                             padding: 0;
@@ -206,14 +328,13 @@ const genres = reactive([
 
                             &-bottom {
                                 width: 100%;
-                                height: 60px;
                                 backdrop-filter: blur(8px);
                                 border-radius: 0 0 12px 12px;
                                 border-top: 1px solid rgba($pure_white, 0.6);
                                 display: flex;
                                 flex-direction: column;
                                 justify-content: center;
-                                padding-left: 12px;
+                                padding: 12px;
                                 text-align: left;
                             }
                         }
