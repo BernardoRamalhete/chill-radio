@@ -184,6 +184,7 @@ function handleGenresMouseUp(event) {
     const dragDelta = dragEnd - dragStart.value
     if(Math.abs(dragDelta) < 100) return
 
+    event.preventDefault()
     if(dragDelta > 0) return handleGenresScroll('right')
     handleGenresScroll('left')
 }
