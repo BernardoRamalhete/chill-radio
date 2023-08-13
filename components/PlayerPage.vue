@@ -190,7 +190,6 @@ function handleGenresMouseUp(event) {
 }
 
 function handleGenresScroll(direction) {
-    
     if(direction == 'left') {
         if(!canScrollGenresLeft.value) return
         genresCarouselPosition.value = (Number(genresCarouselPosition.value.replace('%', '')) + 50) + '%'
@@ -273,11 +272,16 @@ const canScrollGenresRight = ref(true)
                         font-size: 40px;
                         background-color: transparent;
                         color: $text-color;
-                        opacity: 0;
-                        transition: opacity 0.3s ease;
+                        
+                        svg {
+                            transition: opacity 0.3s ease;
+                            opacity: 0;
+                        }
                         
                         &:hover {
+                            svg {
                                 opacity: 1;
+                            }
                         }
                         &.left {
                             left: -5px;
@@ -307,7 +311,9 @@ const canScrollGenresRight = ref(true)
                     transition: left 0.5s ease;
                     &:hover {
                         & ~ .arrow:not(:disabled) {
-                            opacity: 1;
+                            svg {
+                                opacity: 1;
+                            }
                         }
                     }
                     &-item {
