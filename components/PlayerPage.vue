@@ -23,7 +23,15 @@
                 <h2 class=section-title>
                     Find the perfect match to your taste
                 </h2>
-                <div ref="genresContainerElement" class="genres-container">
+                <div 
+                    ref="genresContainerElement" 
+                    class="genres-container" 
+                    @wheel="handleGenresWheelScroll"
+                    @mousedown="handleGenresMouseDown"
+                    @touchstart="handleGenresMouseDown"
+                    @mouseup="handleGenresMouseUp"
+                    @touchend="handleGenresMouseUp"
+                >
                     <ul class="genres-listing">
                         <li
                             v-for="genre in genres" :key="genre.id"
@@ -148,6 +156,37 @@ const genres = reactive([
 ])
 
 const genresCarouselPosition = ref('0')
+
+const throttle = (func, delay = 400) => {
+    let previousTime = 0
+
+    return (...args) => {
+        const now = new Date().getTime()
+        if(now - previousTime > delay) {
+            previousTime = now
+
+            return func(...args)
+        }
+    }
+} 
+
+const handleGenresWheelScroll = throttle((event) => {
+    if(event.deltaY > 0) return handleGenresScroll('right')
+    handleGenresScroll('left')
+})
+
+const dragStart = ref(0)
+function handleGenresMouseDown(event) {
+    dragStart.value = event.clientX ?? event.changedTouches[0].pageX
+}
+function handleGenresMouseUp(event) {
+    const dragEnd = event.clientX ?? event.changedTouches[0].pageX
+    const dragDelta = dragEnd - dragStart.value
+    if(Math.abs(dragDelta) < 100) return
+
+    if(dragDelta > 0) return handleGenresScroll('right')
+    handleGenresScroll('left')
+}
 
 function handleGenresScroll(direction) {
     
