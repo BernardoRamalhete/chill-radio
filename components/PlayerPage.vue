@@ -75,6 +75,28 @@
                 </div>
             </section>
         </div>
+        <aside class="player-sidebar">
+            <h2 class="title">
+                Now playing
+            </h2>
+            <ul class="playlist">
+                <li 
+                    v-for="music in playlist" 
+                    :key="music.id"
+                    class="music"
+                >
+                    <img :src="music.picture" alt=""/>
+                    <span class="music-text">
+                        <strong>{{ music.name }}</strong>
+                        <small>{{ music.artist }}</small>
+                    </span>
+                    <button class="music-actions">
+                        <span class="visually-hidden">Actions for {{ music.name }}</span>
+                        <Icon name="ph:dots-three-vertical"/>
+                    </button>
+                </li>
+            </ul>
+        </aside>
     </section>
 </template>
 
@@ -204,6 +226,33 @@ function handleGenresScroll(direction) {
 const canScrollGenresLeft = ref(false)
 
 const canScrollGenresRight = ref(true)
+
+const playlist = reactive([
+    {
+        id: 'music_1',
+        name: 'Freak Show',
+        artist: 'Jake Daniels, AViVA',
+        picture: 'https://picsum.photos/seed/music_1/200'
+    },
+    {
+        id: 'music_2',
+        name: 'Bad Side',
+        artist: 'Jake Daniels',
+        picture: 'https://picsum.photos/seed/music_2/200'
+    },
+    {
+        id: 'music_3',
+        name: 'BAD BITCH',
+        artist: 'Tessa Violet',
+        picture: 'https://picsum.photos/seed/music_3/200'
+    },
+    {
+        id: 'music_4',
+        name: 'AMERICAN HORROR SHOW',
+        artist: 'SNOW WIFE',
+        picture: 'https://picsum.photos/seed/music_4/200'
+    }
+])
 </script>
 
 <style lang="scss" scoped>
@@ -214,6 +263,7 @@ const canScrollGenresRight = ref(true)
         clip-path: circle(0%);
         transition: clip-path 2s ease;
         color: $text_color;
+        display: flex;
         
         &:after {
             content: '';
@@ -230,9 +280,11 @@ const canScrollGenresRight = ref(true)
         &.active {
             clip-path: circle(100%);
         }
+
         &-content {
             position: relative;
             z-index: 3;
+            flex-grow: 1;
             .header {
                 display: flex;
                 align-items: center;
@@ -251,6 +303,7 @@ const canScrollGenresRight = ref(true)
             }
             .genres {
                 margin: 32px;
+                margin-right: 8px;
                 $item_height: 200px;
                 &-container {
                     position: relative;
@@ -386,6 +439,16 @@ const canScrollGenresRight = ref(true)
                         }
                     }
                 }
+            }
+        }
+
+        &-sidebar {
+            z-index: 2;
+            background-color: lighten($background_color, 2%);
+            padding: 20px 80px;
+            .title {
+                font-weight: 500;
+                font-size: 18px;
             }
         }
     }
