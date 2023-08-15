@@ -42,10 +42,10 @@ function handleMouseDown() {
 const inputElement = ref(null)
 function handleMouseUp() {
     isDragging.value = false
-    updatePercentage(event.clientX)
+    updatePercentage()
 }
 
-function handleMouseMove(event) {
+function handleMouseMove() {
     if(!isDragging.value) return
     updatePercentage()
 }
