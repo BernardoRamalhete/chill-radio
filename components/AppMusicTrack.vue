@@ -15,7 +15,6 @@
             min="0" 
             max="100"
             value="0"
-            @change="getInputValue"
         />
         <div class="range-visual">
             <span class="range-visual-thumb"/>
@@ -34,10 +33,6 @@ const props = defineProps({
 const { inputId } = toRefs(props)
 
 const percentage = ref(0)
-
-function getInputValue(event) {
-    // percentage.value = event.target.value + '%'
-}
 
 const isDragging = ref(false)
 function handleMouseDown() {
