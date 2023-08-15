@@ -69,7 +69,7 @@
                         <label for="track" class="visually-hidden">
                             Navigate through current sound
                         </label>
-                        <input id="track" type="range"/>
+                        <AppMusicTrack inputId="track"/>
                     </span>
                 </span>
             </div>
