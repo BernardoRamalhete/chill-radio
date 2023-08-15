@@ -177,6 +177,9 @@ const canScrollGenresRight = ref(true)
     margin: 32px;
     margin-right: 8px;
     $item_height: 200px;
+    .section-title {
+        margin-bottom: 12px;
+    }
     &-container {
         position: relative;
         height: $item_height;
