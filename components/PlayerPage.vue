@@ -1,6 +1,6 @@
 <template>
     <section class="player" :class="{ active: active }">
-        <BlobBackground/>
+        <BlobBackground v-if="active"/>
         <div class="player-content">
             <header class="header">
                 <label for="search-input" class="visually-hidden">
@@ -20,6 +20,7 @@
                 </AppButton>
             </header>
             <PlayerPageGenresCarousel/>
+            <PlayerPageArtistsCarousel/>
         </div>
         <PlayerPageSidebar/>
     </section>
@@ -44,7 +45,7 @@ const emits = defineEmits(['close:player'])
         position: fixed;
         inset: 0;
         clip-path: circle(0%);
-        transition: clip-path 2s ease;
+        transition: clip-path 2s ease 0.1s;
         color: $text_color;
         display: flex;
         
@@ -68,6 +69,7 @@ const emits = defineEmits(['close:player'])
             position: relative;
             z-index: 2;
             flex-grow: 1;
+            overflow-y: auto;
             .header {
                 display: flex;
                 align-items: center;
