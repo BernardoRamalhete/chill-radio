@@ -31,6 +31,10 @@
                     :key="music.id"
                     class="music"
                 >
+                        <button v-if="music.id == 'music_4'" class="music-toggle">
+                            <Icon v-if="true" name="ph:pause-fill"/>
+                            <Icon v-else name="ph:play-fill"/>
+                        </button>
                     <img :src="music.picture" alt="" class="music-cover"/>
                     <span class="music-text">
                         <strong class="music-text-title">{{ music.name }}</strong>
@@ -258,6 +262,18 @@ const playlist = reactive([
                 .music {
                     display: flex;
                     align-items: center;
+                    &-toggle {
+                        background-color: rgba($background-color, 0.6);
+                        border: none;
+                        position: absolute;
+                        width: 48px;
+                        aspect-ratio: 1;
+                        color: $text_color;
+                        font-size: 24px;
+                        &:focus {
+                            outline: transparent;
+                        }
+                    }
                     &-cover {
                         max-width: 48px;
                         border-radius: 4px;
