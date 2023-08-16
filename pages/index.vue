@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <BlobBackground/>
+        <BlobBackground v-if="!playerActive"/>
         <main class="content">
             <section class="hero">
                 <h1 class="title">
