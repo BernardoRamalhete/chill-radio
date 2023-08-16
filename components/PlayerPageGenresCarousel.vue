@@ -302,9 +302,11 @@ const canScrollGenresRight = ref(true)
 
                 &-bottom {
                     width: 100%;
+                    background-color: rgba($background_color, 0.4);
                     backdrop-filter: blur(8px);
                     border-radius: 0 0 12px 12px;
                     border-top: 1px solid rgba($pure_white, 0.6);
+                    color: $text_color;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
