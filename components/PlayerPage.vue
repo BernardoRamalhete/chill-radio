@@ -41,23 +41,33 @@
                             <strong class="music-text-title">{{ music.name }}</strong>
                             <small class="music-text-artist">{{ music.artist }}</small>
                         </span>
-                        <button class="music-actions" @click="openMusicActions(music.id)">
+                        <button 
+                            class="music-actions" 
+                            :class="{ 'on-top': activeMusicActions == music.id }"
+                            @click="openMusicActions(music.id)"
+                        >
                             <span class="visually-hidden">Actions for {{ music.name }}</span>
                             <Icon name="ph:dots-three-vertical"/>
                         </button>
                     </div>
-                    <ul v-if="activeMusicActions == music.id" class="music-actions-options">
-                        <li>
-                            <button class="action">
-                                Remove from queue
-                            </button>
-                        </li>
-                        <li>
-                            <button class="action">
-                                View artist
-                            </button>
-                        </li>
-                    </ul>
+                    <!-- v-if="activeMusicActions == music.id"  -->
+                    <span
+                        :class="{ active: activeMusicActions == music.id }"
+                    >
+                        <ul class="music-actions-options">
+                            <li class="gradient"/>
+                            <li>
+                                <button class="action">
+                                    Remove from queue
+                                </button>
+                            </li>
+                            <li>
+                                <button class="action">
+                                    View artist
+                                </button>
+                            </li>
+                        </ul>
+                    </span>
                 </li>
             </ul>
             <div class="controls">
@@ -206,14 +216,18 @@ const playlist = reactive([
     },
 ])
 
-const activeMusicActions = ref('music_4')
+const activeMusicActions = ref(null)
 
 function openMusicActions(musicId) {
+    if(activeMusicActions.value == musicId) {
+        closeMusicActions()
+        return
+    }
     activeMusicActions.value = musicId
 }
 
 function closeMusicActions() {
-    activeMusicActions
+    activeMusicActions.value = null
 }
 </script>
 
@@ -231,7 +245,7 @@ function closeMusicActions() {
             content: '';
             position: fixed;
             inset: 0;
-            background-color: $background-color;
+            background-color: $background_color;
         }
 
         .background {
@@ -286,12 +300,28 @@ function closeMusicActions() {
                 overflow-x: visible;
                 margin-block: 12px 28px;
                 .music {
+                    position: relative;
                     & > div {
                         display: flex;
                         align-items: center;
                     }
+                    & > span {
+                        display: grid;
+                        grid-template-rows: 0fr;
+                        transition: grid-template-rows 0.3s ease;
+                        overflow: hidden;
+                        position: absolute;
+                        top: 50%;
+                        width: 100%;
+                        border-radius: 0 0 12px 12px;
+                        &.active {
+                            grid-template-rows: 1fr;
+                            border: 1px solid rgba($text_color, 0.2);
+                            border-top: none;
+                        }
+                    }
                     &-toggle {
-                        background-color: rgba($background-color, 0.6);
+                        background-color: rgba($background_color, 0.6);
                         border: none;
                         position: absolute;
                         width: 48px;
@@ -323,32 +353,56 @@ function closeMusicActions() {
                             text-overflow: ellipsis;
                         }
                     }
-                    &-actions {
+                    &-actions { 
                         background-color: transparent;
                         color: $text_color;
                         font-size: 24px;
                         padding: 2px;
                         border: none;
+                        cursor: pointer;
+                        &.on-top {
+                            z-index: 3;
+                        }
                         &:focus {
                             outline: transparent;
                         }
                         
                         &-options {
-                            border-radius: 12px;
+                            overflow: hidden;
                             min-width: fit-content;
+                            z-index: 2;
+                            border-top: none;
                             li {
                                 .action {
                                     border: none;
-                                    background-color: transparent;
-                                    color: $text_color;
                                     width: 100%;
-                                    padding-block: 8px;
+                                    background-color: $background_color;
+                                    padding: 12px;
                                     text-align: left;
                                     white-space: nowrap;
-                                    border-bottom: 1px solid rgba($background-color, 0.4);
+                                    border-bottom: 1px solid rgba($text_color, 0.2);
                                     font-size: 14px;
+                                    color: $text_color;
+                                    transition: background-color 0.2s ease;
+                                    cursor: pointer;
+                                    &:hover {
+                                        background-color: lighten($background_color, 2%);
+                                    }
                                     &:focus {
                                         outline: transparent;
+                                    }
+                                }
+
+                                &.gradient {
+                                    background-color: transparent;
+                                    height: 30px;
+                                    width: 100%;
+                                    background: linear-gradient(transparent, $background_color);
+                                }
+
+                                &:last-of-type {
+                                    .action {
+                                        border: none;
                                     }
                                 }
                             }
@@ -371,7 +425,7 @@ function closeMusicActions() {
                     left: 50%;
                     padding: 20px 16px;
                     transform: translateX(-50%);
-                    background-color: rgba($background-color, 0.8);
+                    background-color: rgba($background_color, 0.8);
                     border-radius: 8px;
                     display: flex;
                     flex-direction: column;
