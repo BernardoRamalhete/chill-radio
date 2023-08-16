@@ -348,6 +348,7 @@ function closeMusicActions() {
             padding: 20px 16px;
             transform: translateX(-50%);
             background-color: rgba($background_color, 0.8);
+            backdrop-filter: blur(8px);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
