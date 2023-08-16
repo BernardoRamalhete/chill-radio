@@ -31,19 +31,33 @@
                     :key="music.id"
                     class="music"
                 >
+                    <div>
                         <button v-if="music.id == 'music_4'" class="music-toggle">
                             <Icon v-if="true" name="ph:pause-fill"/>
                             <Icon v-else name="ph:play-fill"/>
                         </button>
-                    <img :src="music.picture" alt="" class="music-cover"/>
-                    <span class="music-text">
-                        <strong class="music-text-title">{{ music.name }}</strong>
-                        <small class="music-text-artist">{{ music.artist }}</small>
-                    </span>
-                    <button class="music-actions">
-                        <span class="visually-hidden">Actions for {{ music.name }}</span>
-                        <Icon name="ph:dots-three-vertical"/>
-                    </button>
+                        <img :src="music.picture" alt="" class="music-cover"/>
+                        <span class="music-text">
+                            <strong class="music-text-title">{{ music.name }}</strong>
+                            <small class="music-text-artist">{{ music.artist }}</small>
+                        </span>
+                        <button class="music-actions" @click="openMusicActions(music.id)">
+                            <span class="visually-hidden">Actions for {{ music.name }}</span>
+                            <Icon name="ph:dots-three-vertical"/>
+                        </button>
+                    </div>
+                    <ul v-if="activeMusicActions == music.id" class="music-actions-options">
+                        <li>
+                            <button class="action">
+                                Remove from queue
+                            </button>
+                        </li>
+                        <li>
+                            <button class="action">
+                                View artist
+                            </button>
+                        </li>
+                    </ul>
                 </li>
             </ul>
             <div class="controls">
@@ -191,6 +205,16 @@ const playlist = reactive([
         picture: 'https://picsum.photos/seed/music_4/200'
     },
 ])
+
+const activeMusicActions = ref('music_4')
+
+function openMusicActions(musicId) {
+    activeMusicActions.value = musicId
+}
+
+function closeMusicActions() {
+    activeMusicActions
+}
 </script>
 
 <style lang="scss" scoped>
@@ -221,7 +245,7 @@ const playlist = reactive([
 
         &-content {
             position: relative;
-            z-index: 3;
+            z-index: 2;
             flex-grow: 1;
             .header {
                 display: flex;
@@ -247,6 +271,7 @@ const playlist = reactive([
             padding: 20px 80px;
             display: flex;
             flex-direction: column;
+            position: relative;
             .title {
                 font-weight: 400;
                 font-size: 16px;
@@ -257,11 +282,14 @@ const playlist = reactive([
                 gap: 16px;
                 flex-grow: 1;
                 max-height: 100%;
-                overflow: auto;
+                overflow-y: auto;
+                overflow-x: visible;
                 margin-block: 12px 28px;
                 .music {
-                    display: flex;
-                    align-items: center;
+                    & > div {
+                        display: flex;
+                        align-items: center;
+                    }
                     &-toggle {
                         background-color: rgba($background-color, 0.6);
                         border: none;
@@ -303,6 +331,27 @@ const playlist = reactive([
                         border: none;
                         &:focus {
                             outline: transparent;
+                        }
+                        
+                        &-options {
+                            border-radius: 12px;
+                            min-width: fit-content;
+                            li {
+                                .action {
+                                    border: none;
+                                    background-color: transparent;
+                                    color: $text_color;
+                                    width: 100%;
+                                    padding-block: 8px;
+                                    text-align: left;
+                                    white-space: nowrap;
+                                    border-bottom: 1px solid rgba($background-color, 0.4);
+                                    font-size: 14px;
+                                    &:focus {
+                                        outline: transparent;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
