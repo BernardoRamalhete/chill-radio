@@ -71,6 +71,9 @@
         height: 100%;
         color: transparent;
         user-select: none;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
     }
 
     .hover {
@@ -418,8 +421,10 @@
         border-radius: 8px;
         background-color: transparent;
         backdrop-filter: blur(0);
-        display: grid;
-        place-items: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         white-space: nowrap;
         font-size: 18px;
         font-weight: 500;
@@ -431,11 +436,19 @@
     &.primary {
         .background {
             background-color: $light_blue;
-            transition: all 0.3s ease;
+        }
+    }
+
+    &.green {
+        .background {
+            background-color: $bright_green;
         }
     }
 
     &.icon {
+        height: 100%;
+        width: unset;
+        aspect-ratio: 1;
         .background {
             font-size: 24px;
             padding: 2px 6px;
